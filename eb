@@ -10,15 +10,13 @@ local aiming = false
 local espEnabled = false
 local aimbotEnabled = false
 
--- Configurações ajustadas
 local aimKey = Enum.UserInputType.MouseButton2
 local toggleESPKey = Enum.KeyCode.Q
 local toggleAimbotKey = Enum.KeyCode.E
 local fovRadius = 50
 
-local targetPart = "Head" -- Parte padrão para mirar
+local targetPart = "Head"
 
--- Desenho do círculo do FOV
 local fovCircle = Drawing.new("Circle")
 fovCircle.Visible = false
 fovCircle.Color = Color3.new(1, 1, 0)
@@ -27,7 +25,6 @@ fovCircle.Filled = false
 fovCircle.Radius = fovRadius
 fovCircle.Position = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
 
--- Função para criar destaque (ESP) para jogadores
 local function createHighlight(player)
     if player.Character and player.Character:FindFirstChild("HumanoidRootPart") and not player.Character:FindFirstChild("Highlight") then
         local highlight = Instance.new("Highlight")
@@ -40,12 +37,11 @@ local function createHighlight(player)
         if player.Team then
             highlight.FillColor = player.Team.TeamColor.Color
         else
-            highlight.FillColor = Color3.new(1, 0, 0)  -- Caso não tenha time
+            highlight.FillColor = Color3.new(1, 0, 0)
         end
     end
 end
 
--- Função para atualizar o ESP
 local function updateESP()
     for _, player in ipairs(Players:GetPlayers()) do
         if player ~= localPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
@@ -54,7 +50,6 @@ local function updateESP()
     end
 end
 
--- Função para remover o ESP
 local function removeESP()
     for _, player in ipairs(Players:GetPlayers()) do
         if player.Character and player.Character:FindFirstChild("Highlight") then
@@ -63,7 +58,6 @@ local function removeESP()
     end
 end
 
--- Função para criar GUI
 local function createGui()
     local screenGui = Instance.new("ScreenGui", game.Players.LocalPlayer:WaitForChild("PlayerGui"))
     screenGui.Name = "AimbotGui"
@@ -111,12 +105,10 @@ local function createGui()
 
     headButton.MouseButton1Click:Connect(function()
         targetPart = "Head"
-        print("Mira definida para a cabeça.")
     end)
 
     torsoButton.MouseButton1Click:Connect(function()
         targetPart = "HumanoidRootPart"
-        print("Mira definida para o torso.")
     end)
 
     closeButton.MouseButton1Click:Connect(function()
@@ -124,7 +116,6 @@ local function createGui()
     end)
 end
 
--- Função para encontrar o jogador mais próximo no FOV
 local function findTarget()
     local closestPlayer = nil
     local shortestDistance = math.huge
@@ -149,7 +140,6 @@ local function findTarget()
     return closestPlayer
 end
 
--- Função do aimbot
 local function aimbot()
     if aiming and target then
         local part = target.Character:FindFirstChild(targetPart)
@@ -168,20 +158,15 @@ UserInputService.InputBegan:Connect(function(input)
     if input.KeyCode == toggleESPKey then
         espEnabled = not espEnabled
         if espEnabled then
-            print("ESP ativado.")
-            updateESP() -- Garante que o ESP seja ativado ao pressionar a tecla
+            updateESP()
         else
-            print("ESP desativado.")
-            removeESP() -- Garante que o ESP seja desativado ao pressionar a tecla
+            removeESP()
         end
     end
 
     if input.KeyCode == toggleAimbotKey then
         aimbotEnabled = not aimbotEnabled
-        if aimbotEnabled then
-            print("Aimbot ativado.")
-        else
-            print("Aimbot desativado.")
+        if not aimbotEnabled then
             aiming = false
             target = nil
         end
@@ -206,6 +191,6 @@ RunService.RenderStepped:Connect(function()
         aimbot()
     end
     if espEnabled then
-        updateESP() -- Garante que o ESP seja atualizado em cada quadro
+        updateESP()
     end
 end)
