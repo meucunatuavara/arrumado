@@ -8,11 +8,10 @@ local localPlayer = Players.LocalPlayer
 local target = nil
 local aiming = false
 local espEnabled = false
-local aimbotEnabled = false
+local aimbotEnabled = true  -- Aimbot agora começa como ativado por padrão
 
-local aimKey = Enum.UserInputType.MouseButton3
+local aimKey = Enum.KeyCode.E  -- Alterado para a tecla E
 local toggleESPKey = Enum.KeyCode.Q
-local toggleAimbotKey = Enum.KeyCode.E
 local fovRadius = 50
 
 local targetPart = "Head"
@@ -164,22 +163,14 @@ UserInputService.InputBegan:Connect(function(input)
         end
     end
 
-    if input.KeyCode == toggleAimbotKey then
-        aimbotEnabled = not aimbotEnabled
-        if not aimbotEnabled then
-            aiming = false
-            target = nil
-        end
-    end
-
-    if input.UserInputType == aimKey and aimbotEnabled then
+    if input.KeyCode == aimKey and aimbotEnabled then  -- Alterado para tecla E
         target = findTarget()
         aiming = true
     end
 end)
 
 UserInputService.InputEnded:Connect(function(input)
-    if input.UserInputType == aimKey then
+    if input.KeyCode == aimKey then  -- Alterado para tecla E
         aiming = false
         target = nil
     end
