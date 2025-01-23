@@ -10,7 +10,7 @@ local aiming = false
 local espEnabled = false
 local aimbotEnabled = false
 
-local aimKey = Enum.UserInputType.MouseButton2
+local aimKey = Enum.UserInputType.MouseButton3
 local toggleESPKey = Enum.KeyCode.Q
 local toggleAimbotKey = Enum.KeyCode.E
 local fovRadius = 50
