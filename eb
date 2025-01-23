@@ -7,9 +7,9 @@ local Teams = game:GetService("Teams")
 local localPlayer = Players.LocalPlayer
 local target = nil
 local espEnabled = false
-local aimbotActive = false 
+local aimbotActive = false -- Variável para alternar o estado do aimbot
 
-local aimKey = Enum.KeyCode.E 
+local aimKey = Enum.KeyCode.E -- Tecla para ativar/desativar o aimbot
 local toggleESPKey = Enum.KeyCode.Q
 local fovRadius = 50
 
@@ -90,8 +90,73 @@ local function aimbot()
     end
 end
 
+local function createGui()
+    local screenGui = Instance.new("ScreenGui", game.Players.LocalPlayer:WaitForChild("PlayerGui"))
+    screenGui.Name = "AimbotGui"
+
+    local frame = Instance.new("Frame", screenGui)
+    frame.Size = UDim2.new(0, 200, 0, 150)
+    frame.Position = UDim2.new(0.5, -100, 0.5, -75)
+    frame.BackgroundColor3 = Color3.new(0.1, 0.1, 0.1)
+    frame.BorderSizePixel = 0
+
+    local title = Instance.new("TextLabel", frame)
+    title.Size = UDim2.new(1, 0, 0, 30)
+    title.Text = "Select Target Part"
+    title.BackgroundColor3 = Color3.new(0.2, 0.2, 0.2)
+    title.TextColor3 = Color3.new(1, 1, 1)
+    title.Font = Enum.Font.SourceSansBold
+    title.TextSize = 16
+
+    local headButton = Instance.new("TextButton", frame)
+    headButton.Size = UDim2.new(1, -20, 0, 30)
+    headButton.Position = UDim2.new(0, 10, 0, 40)
+    headButton.Text = "Head"
+    headButton.BackgroundColor3 = Color3.new(0.3, 0.3, 0.3)
+    headButton.TextColor3 = Color3.new(1, 1, 1)
+    headButton.Font = Enum.Font.SourceSans
+    headButton.TextSize = 14
+
+    local torsoButton = Instance.new("TextButton", frame)
+    torsoButton.Size = UDim2.new(1, -20, 0, 30)
+    torsoButton.Position = UDim2.new(0, 10, 0, 80)
+    torsoButton.Text = "Torso"
+    torsoButton.BackgroundColor3 = Color3.new(0.3, 0.3, 0.3)
+    torsoButton.TextColor3 = Color3.new(1, 1, 1)
+    torsoButton.Font = Enum.Font.SourceSans
+    torsoButton.TextSize = 14
+
+    local closeButton = Instance.new("TextButton", frame)
+    closeButton.Size = UDim2.new(1, -20, 0, 30)
+    closeButton.Position = UDim2.new(0, 10, 0, 120)
+    closeButton.Text = "Close"
+    closeButton.BackgroundColor3 = Color3.new(0.3, 0.3, 0.3)
+    closeButton.TextColor3 = Color3.new(1, 1, 1)
+    closeButton.Font = Enum.Font.SourceSans
+    closeButton.TextSize = 14
+
+    headButton.MouseButton1Click:Connect(function()
+        targetPart = "Head"
+    end)
+
+    torsoButton.MouseButton1Click:Connect(function()
+        targetPart = "HumanoidRootPart"
+    end)
+
+    closeButton.MouseButton1Click:Connect(function()
+        screenGui:Destroy()
+    end)
+end
+
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
-    if not gameProcessed and input.KeyCode == aimKey then
+    if not gameProcessed and input.KeyCode == Enum.KeyCode.Zero then
+        -- Verifica se a GUI já foi criada
+        if not game.Players.LocalPlayer:FindFirstChild("PlayerGui"):FindFirstChild("AimbotGui") then
+            createGui() -- Cria o painel
+        end
+    end
+
+    if input.KeyCode == aimKey then
         aimbotActive = not aimbotActive -- Alterna o estado do aimbot
         if aimbotActive then
             target = findTarget()
